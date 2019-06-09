@@ -22,7 +22,7 @@
 								<input type="password" v-model="ruleForm.pasword" placeholder="密码"/>
 							</div>
 							
-							<button  @click="submitForm()">登录</button>
+							<button  @click="onSumbit">登录</button>
 							<div class="display-flex-row login-href">
 								<a href="#" class="login-admin">平台管理登录</a>
 								<a href="#" class="forgetPassword">忘记密码</a>
@@ -44,9 +44,8 @@
 </template>
 
 <script>
-	import {
-		userLogin
-	} from "../../../api/api/index.js"
+	import { userLogin } from "../../../api/api/index.js"
+
 	export default {
 		data() {
 			return {
@@ -58,59 +57,75 @@
 			}
 		},
 		methods: {
+			onSumbit () {
+				const params = {
+					name: '12345678900',
+					pasword: 'test',
+					type: '4'
+				}
+				this.Ajax('/user/login1', 'POST', params).then(res => {
+
+				})
+			},
+
 			submitForm(formName) {
-					if (this.ruleForm.name==""){
-						this.$message({
-							message: "请输入用户名或手机号",
-							type: 'error',
-							duration: 5 * 1000
-						});
-					} else if (this.ruleForm.pasword==""){
-						this.$message({
-							message: "请输入密码",
-							type: 'error',
-							duration: 5 * 1000
-						});
-					}
-					else{
-						//alert('submit!');
-						userLogin(this.ruleForm).then((res) => {
-							this.$message({
-								message: "登录成功",
-								type: 'success',
-								duration: 5 * 1000
-							});
-							let _data=res.data;
+					// if (this.ruleForm.name==""){
+					// 	this.$message({
+					// 		message: "请输入用户名或手机号",
+					// 		type: 'error',
+					// 		duration: 5 * 1000
+					// 	});
+					// } else if (this.ruleForm.pasword==""){
+					// 	this.$message({
+					// 		message: "请输入密码",
+					// 		type: 'error',
+					// 		duration: 5 * 1000
+					// 	});
+					// }
+					// else{
+					// 	//alert('submit!');
+					// 	userLogin(this.ruleForm).then((res) => {
+					// 		this.$message({
+					// 			message: "登录成功",
+					// 			type: 'success',
+					// 			duration: 5 * 1000
+					// 		});
+					// 		let _data=res.data;
 							
-							if (this.type==1) {
-								_data.userView.relos="jl"
-							} else if (this.type==2) {
-								_data.userView.relos="qy"
-							} else{
-								_data.userView.relos="jg"
-							}
-							localStorage.userData = JSON.stringify(_data)
-							//this.$router.push("/")
-							if (this.type==1) {
-								window.location.href="/coach/index"
-							} else if (this.type==2) {
-								window.location.href="/organ/index"
-							} else if (this.type==3) {
-								window.location.href="/parent/index"
-							}
+					// 		if (this.type==1) {
+					// 			_data.userView.relos="jl"
+					// 		} else if (this.type==2) {
+					// 			_data.userView.relos="qy"
+					// 		} else{
+					// 			_data.userView.relos="jg"
+					// 		}
+					// 		localStorage.userData = JSON.stringify(_data)
+					// 		//this.$router.push("/")
+					// 		if (this.type==1) {
+					// 			window.location.href="/coach/index"
+					// 		} else if (this.type==2) {
+					// 			window.location.href="/organ/index"
+					// 		} else if (this.type==3) {
+					// 			window.location.href="/parent/index"
+					// 		}
 							
-						}).catch((res) => {
-							this.$message({
-								message: res.message,
-								type: 'error',
-								duration: 5 * 1000
-							});
-						})
-					}
+					// 	}).catch((res) => {
+					// 		this.$message({
+					// 			message: res.message,
+					// 			type: 'error',
+					// 			duration: 5 * 1000
+					// 		});
+					// 	})
+					// }
 			}
 			,changtype(num){
-				this.ruleForm.type=num
+				this.ruleForm.type = num
 			}
+		},
+
+
+	  created () {
+
 		}
 	}
 </script>

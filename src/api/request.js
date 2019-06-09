@@ -6,7 +6,7 @@ import router from '@/router/router';
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.BASE_API, // 测试IP
+  baseURL: 'http://139.155.113.181', // 测试IP
   timeout: 10000 // request timeout
 });
 
