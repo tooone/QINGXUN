@@ -45,6 +45,7 @@
 
 <script>
   import { login } from '../../../api/module/login'
+  import { mapMutations } from 'vuex'
 
   export default {
     data() {
@@ -56,13 +57,26 @@
         },
       }
     },
+
+    computed: {
+
+    },
+
     methods: {
+      ...mapMutations('Login', [
+        'setLoginStatus'
+      ]),
+
       onSumbit () {
         if (!this.checkForm()) return false
 
+        const { type } = this.ruleForm
         login(this.ruleForm).then(res => {
-          const { code } = res
+          const { code, data } = res
           if (code === 200) {
+            const { userView } = data
+            userView.userType = type
+            this.setLoginStatus(userView)
             this.$router.push('/')
           }
         })
