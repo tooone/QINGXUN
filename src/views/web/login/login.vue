@@ -75,8 +75,16 @@
           const { code, data } = res
           if (code === 200) {
             const { userView } = data
+            const { statusId, pic, nikename } = userView
+
             userView.userType = type
             this.setLoginStatus(userView)
+
+            // 存到客户端缓存
+            sessionStorage.setItem('statusId', statusId)
+            sessionStorage.setItem('headPic', pic)
+            sessionStorage.setItem('nikename', nikename)
+
             this.$router.push('/')
           }
         })

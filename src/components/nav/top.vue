@@ -9,7 +9,7 @@
         :key="index"
         :class="{'active':index==activeindex}"><router-link :to="item.url">{{item.name}}</router-link></div>
         <div class="navbar-item" :class="{'active':menulist.length==activeindex}">
-          <a>入住入口</a>
+          <a>入驻入口</a>
           <ul class="rukouul">
             <li @click="activeIndex(menulist.length)"><router-link to="/registered/JG">机构入驻</router-link></li>
             <li @click="activeIndex(menulist.length)"><router-link to="/registered/JL">教练入驻</router-link></li>
@@ -20,11 +20,11 @@
       <div class="head-right">
         <!-- 登录状态 -->
         <div class="user-info" v-if="userStatus">
-          <img class="headPic" :src="userStatus.pic" alt="头像异常"/>
+          <img class="headPic" :src="headPic" alt="头像异常"/>
 
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
-              {{userStatus.nikename}}<i class="el-icon-arrow-down el-icon--right"></i>
+              {{nikename}}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
 
             <el-dropdown-menu slot="dropdown">
@@ -98,7 +98,15 @@ export default {
   computed: {
     ...mapState('Login', [
       'userStatus'
-    ])
+    ]),
+
+    nikename () {
+      return sessionStorage.getItem('nikename')
+    },
+
+    headPic () {
+      return sessionStorage.getItem('headPic')
+    }
   },
 
   methods:{

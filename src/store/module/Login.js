@@ -13,6 +13,9 @@ const mutations = {
 
   clearLoginStatus (state, data) {
     state.userStatus = null
+    sessionStorage.removeItem('statusId')
+    sessionStorage.removeItem('headPic')
+    sessionStorage.removeItem('nikename')
   }
 }
 
