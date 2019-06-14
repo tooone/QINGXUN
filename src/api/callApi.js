@@ -20,6 +20,7 @@ function checkStatus (response) {
 // 判断是网络异常还是程序异常
 function checkError (error) {
   const { response } = error
+
   if (response) {
     const status = response.status
     switch (status) {
@@ -36,7 +37,7 @@ function checkError (error) {
         Message.error({ showClose: true, message: `网络异常了！！！(${status})` })
     }
   } else {
-    Message.error({ showClose: true, message: error.message || '服务器异常了！！！' })
+    Message.error({ showClose: true, message: `${error.message} (${error.code})` || '服务器异常了！！！' })
   }
   throw error
 }

@@ -16,14 +16,24 @@ const mutations = {
     sessionStorage.removeItem('statusId')
     sessionStorage.removeItem('headPic')
     sessionStorage.removeItem('nikename')
+    sessionStorage.removeItem('id')
   }
 }
 
 const actions = {
-  logOut ( { commit } ,data) {
+  logOut ( { commit }, data) {
     return request ({
       url: '/user/logout',
       methods: 'GET'
+    })
+  },
+
+  passwordReset ( { commit }, data) {
+    console.log(data)
+    return request ({
+      url: '/user/password',
+      methods: 'POST',
+      params: data
     })
   }
 }

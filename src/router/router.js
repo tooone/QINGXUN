@@ -18,13 +18,18 @@ export const constantRouterMap = [
 		
 		//登录
 		{path: '/login/login',name: '/login/login',component: () => import('../views/web/login/login')},
+    
+    // 教案
+    {path: '/coach/mycourse',name: '/coach/mycourse',component: () => import('../views/coach/mycourse')},
+
+    // 教案详情
+		{path: '/coachTraining/lessonDetail',name: '/aboutUs',component: () => import('../views/coach/lessonDetail')},
 		
 		
-		
-		//WEB模块
+    //WEB模块
+		{path: '/coachTraining',name: '/coachTraining',component: () => import('../views/web/coachTraining')},
 		{path: '/trainingAgency',name: '/trainingAgency',component: () => import('../views/web/trainingAgency')},
 		{path: '/aboutUs',name: '/aboutUs',component: () => import('../views/web/aboutUs')},
-		{path: '/coachTraining',name: '/coachTraining',component: () => import('../views/web/coachTraining')},
 		{path: '/information',name: '/information',component: () => import('../views/web/information')},
 		{path: '/informationDetails/:id',name: '/informationDetails',component: () => import('../views/web/informationDetails')},
 		{path: '/trainingDetail',name: '/trainingDetail',component: () => import('../views/web/trainingDetail')},
@@ -52,7 +57,6 @@ export const constantRouterMap = [
 		{path: '/coach/auditDetail',name: '/coach/auditDetail',component: () => import('../views/coach/auditDetail')},						
     {path: '/coach/courseDetail',name: '/coach/courseDetail',component: () => import('../views/coach/courseDetail')},						
     {path: '/coach/index',name: '/coach/index',component: () => import('../views/coach/index')},						
-    {path: '/coach/mycourse',name: '/coach/mycourse',component: () => import('../views/coach/mycourse')},						
     {path: '/coach/myDate',name: '/coach/myDate',component: () => import('../views/coach/myDate')},
     {path: '/coach/groupMan',name: '/coach/groupMan',component: () => import('../views/coach/groupMan')},
     {path: '/coach/auditList',name: '/coach/auditList',component: () => import('../views/coach/auditList')},
@@ -79,6 +83,8 @@ export const constantRouterMap = [
     {path: '/platform/matchDetail',name: '/platform/matchDetail',component: () => import('../views/platform/matchDetail')},
     {path: '/platform/courseDetails',name: '/platform/courseDetails',component: () => import('../views/platform/courseDetails')},
     {path: '/platform/InstitutionalDetails',name: '/platform/InstitutionalDetails',component: () => import('../views/platform/InstitutionalDetails')},
+
+    // {path: '/passwordReset',name: '/passwordReset',component: () => import('../components/nav/ResetPassWord')},
 
     // { 						
     // { 						

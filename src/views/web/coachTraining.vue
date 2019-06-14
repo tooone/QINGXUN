@@ -6,70 +6,125 @@
                                 <p>COACH TRAINING</p>
                         </div>
                 </div>
+
                 <div class="content">
-                        <div class="navbar">
-                                <a class="active" href="#">在线学习</a>
-                                <a href="#">线下进修</a>
-                        </div>
-                        <div class="tabs">
-                                <div class="tabs-con">
-                                        <a class="active" href="#">免费</a>
-                                        <a href="#">付费</a>
-                                </div>
-                        </div>
-                        <div class="tabs-container">
-                                <div class="tabs-con-item">
-                                        <div class="image"><img src="/images/coach_1.jpg" alt="">
-                                                <p class="tabs-item-title">中小学实用足球技能</p>
-                                        </div>
-                                        <router-link class="tabs-button" to="/trainingDetail">查看详情<img src="/images/right_arrow.png" /></router-link>
-                                </div>
-                                <div class="tabs-con-item">
-                                        <div class="image"><img src="/images/coach_1.jpg" alt="">
-                                                <p class="tabs-item-title">中小学实用足球技能</p>
-                                        </div>
-                                        <a class="tabs-button" href="#">查看详情<img src="/images/right_arrow.png" /></a>
-                                </div>
-                                <div class="tabs-con-item">
-                                        <div class="image"><img src="/images/coach_1.jpg" alt="">
-                                                <p class="tabs-item-title">中小学实用足球技能</p>
-                                        </div>
-                                        <a class="tabs-button" href="#">查看详情<img src="/images/right_arrow.png" /></a>
-                                </div>
-                                <div class="tabs-con-item">
-                                        <div class="image"><img src="/images/coach_1.jpg" alt="">
-                                                <p class="tabs-item-title">中小学实用足球技能</p>
-                                        </div>
-                                        <a class="tabs-button" href="#">查看详情<img src="/images/right_arrow.png" /></a>
-                                </div>
-                                <div class="tabs-con-item">
-                                        <div class="image"><img src="/images/coach_1.jpg" alt="">
-                                                <p class="tabs-item-title">中小学实用足球技能</p>
-                                        </div>
-                                        <a class="tabs-button" href="#">查看详情<img src="/images/right_arrow.png" /></a>
-                                </div>
-                                <div class="tabs-con-item">
-                                        <div class="image"><img src="/images/coach_1.jpg" alt="">
-                                                <p class="tabs-item-title">中小学实用足球技能</p>
-                                        </div>
-                                        <a class="tabs-button" href="#">查看详情<img src="/images/right_arrow.png" /></a>
-                                </div>
-                        </div>
+
+                  <div style="margin-top:20px">
+                    <el-radio-group v-model="online" @change="changeOnline">
+                      <el-radio-button :label="1">在线学习</el-radio-button>
+                      <el-radio-button :label="2">线下进修</el-radio-button>
+                    </el-radio-group>
+                  </div>
+
+                  <div class="tabs">
+                          <div class="tabs-con">
+                            <el-radio-group v-model="searchData.type" @change="changeForFreeType">
+                              <el-radio-button :label="1">免费</el-radio-button>
+                              <el-radio-button :label="2">收费</el-radio-button>
+                            </el-radio-group>
+                          </div>
+                  </div>
+                  <div class="tabs-container">
+                    <div class="tabs-con-item" v-for="(item, index) in lists" :key="index">
+                      <div class="image"><img :src="item.imgs" alt="">
+                        <p class="tabs-item-title">{{item.name}}</p>
+                      </div>
+                      <div class="tabs-button" @click="toDetail(item.id)">查看详情<img src="/images/right_arrow.png" /></div>
+                    </div>
+                  </div>
+
+                  <el-pagination
+                    @current-change="onChange"
+                    layout="prev, pager, next"
+                    :total="searchData.total">
+                  </el-pagination>
                 </div>
         </div>
-	</div>
-	
-	</div>
+  </div>
+  
+  </div>
  </template>
  
  <script>
- 	export default {
- 		data() {
- 			return {
- 				key: "value"
- 			}
- 		},
- 	}
+import { mapActions } from 'vuex'
+
+export default {
+  data() {
+    return {
+      searchData: {
+        type: 1,
+        pageNum: 1,
+        total: 0
+      },
+
+      online: 1,
+
+      lists: []
+    }
+  },
+
+  methods: {
+    ...mapActions('coachTraining', [
+      'fetchOnlineList',
+      'fetchUnderList'
+    ]),
+
+    onChange (val) {
+      this.searchData.pageNum = val
+      this.getList()
+    },
+
+    getList () {
+      if (this.online === 1) {
+        this.fetchOnLine()
+      }
+
+      if (this.online === 2) {
+        this.fetchUnderLine()
+      }
+
+      return false
+    },
+
+    fetchOnLine () {
+      this.fetchOnlineList(this.searchData).then(res => {
+        const { code, data: { list, total } } = res
+        if (code === 200) {
+          this.searchData.total = Number(total)
+          this.lists = list || []
+        }
+      })
+    },
+
+    fetchUnderLine () {
+      this.fetchUnderList(this.searchData).then(res => {
+        const { code, data: { list, total } } = res
+        if (code === 200) {
+          this.searchData.total = Number(total)
+          this.lists = list || []
+        }
+      })
+    },
+
+    changeOnline (val) {
+      this.online = val
+      this.getList()
+    },
+
+    changeForFreeType (val) {
+      this.searchData.type = val
+      this.getList()
+    },
+
+    toDetail (id) {
+      this.$router.push({path: '/trainingDetail', query: {id}})
+    }
+  },
+
+  created () {
+    this.getList()
+  }
+}
  </script>
  
  <style scoped>

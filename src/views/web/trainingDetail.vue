@@ -62,13 +62,44 @@
  </template>
  
  <script>
- 	export default {
- 		data() {
- 			return {
- 				key: "value"
- 			}
- 		},
- 	}
+  import { mapActions } from 'vuex'
+
+  export default {
+    data() {
+      return {
+        key: "value",
+        dataForm: {
+
+        }
+      }
+    },
+
+    computed: {
+      id () {
+				return this.$route.query
+      }
+    },
+
+    methods: {
+      ...mapActions('coachTraining', [
+        'fetchTrainingDetail'
+      ]),
+
+      getDetail () {
+
+        this.fetchTrainingDetail(this.id).then(res => {
+          const { code, data } = res
+          if (code === 200) {
+            this.dataForm = data || {}
+          }
+        })
+      }
+    },
+
+    created () {
+      this.getDetail()
+    }
+  }
  </script>
  
  <style scoped>

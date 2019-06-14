@@ -101,6 +101,8 @@
 	</template>
 	
 	<script>
+			import { mapActions } from 'vuex'
+
 		 	import {coachGet} from "../../api/api/coach.js"
 	  export default {
 	    data() {
@@ -110,18 +112,33 @@
 					datalist:{},
 	        colors: ['#99A9BF', '#F7BA2A', '#FF9900']  // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
 	      }
-	    },
-			 	created(){
-					let _id=(JSON.parse(localStorage.getItem("userData") )).id;
-				coachGet({id:_id}).then((res) => {
-					this.datalist=res.data
-				}).catch((res) => {
-					this.$message({
-						message: res.message,
-						type: 'error',
-						duration: 5 * 1000
-					});
-				})
+			},
+			
+			methods: {
+				...mapActions('myDate', [
+					'fetchMyDate'
+				]),
+
+				getData () {
+					console.log(sessionStorage)
+					this.fetchMyDate({id:24}).then(res => {
+						console.log(res)
+					})
+				}
+			},
+
+			 	created () {
+					this.getData()
+				// 	let _id=(JSON.parse(localStorage.getItem("userData") )).id;
+				// coachGet({id:_id}).then((res) => {
+				// 	this.datalist=res.data
+				// }).catch((res) => {
+				// 	this.$message({
+				// 		message: res.message,
+				// 		type: 'error',
+				// 		duration: 5 * 1000
+				// 	});
+				// })
 			}
 	  }
 	</script>

@@ -2,7 +2,8 @@
   <div class="header">
     <div class="head-con">
       <div class="logo"><img src="./logo.png" alt="青训" /></div>
-      <div class="navbar">
+
+      <!-- <div class="navbar">
         <div class="navbar-item" 
         v-for="(item,index) in menulist"
         @click="activeIndex(index)"
@@ -16,7 +17,24 @@
             <li @click="activeIndex(menulist.length)"><router-link to="/registered/QY">家长/球员注册</router-link></li>
           </ul>
         </div>
+      </div> -->
+
+      <div class="navbar">
+        <div class="navbar-item" 
+        v-for="(item,index) in navType"
+        @click="activeIndex(index)"
+        :key="index"
+        :class="{'active':index==activeindex}"><router-link :to="item.url">{{item.name}}</router-link></div>
+        <div class="navbar-item" :class="{'active':menulist.length==activeindex}">
+          <a>入驻入口</a>
+          <ul class="rukouul">
+            <li @click="activeIndex(menulist.length)"><router-link to="/registered/JG">机构入驻</router-link></li>
+            <li @click="activeIndex(menulist.length)"><router-link to="/registered/JL">教练入驻</router-link></li>
+            <li @click="activeIndex(menulist.length)"><router-link to="/registered/QY">家长/球员注册</router-link></li>
+          </ul>
+        </div>
       </div>
+
       <div class="head-right">
         <!-- 登录状态 -->
         <div class="user-info" v-if="userStatus">
@@ -39,9 +57,7 @@
       </div>
     </div>
 
-    <!-- dialog -->
-
-    <el-dialog title="重置密码" :visible.sync="resetPassWordDialog" width="20%">
+    <el-dialog title="重置密码" :visible.sync="resetPassWordDialog" width="20%" :modal-append-to-body="false">
       <reset-pass-word/>
     </el-dialog>
   </div>
@@ -50,6 +66,67 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import ResetPassWord from './ResetPassWord.vue'
+
+// 未登陆
+const navList = [
+  { name: '首页', url: '/' },
+  { name: '教练进修', url: '/coachTraining' },
+  { name: '我的教案', url: '/coach/mycourse' },
+  { name: '我的资料', url: '/coach/myDate'  },
+  { name: '小将之家', url: '/familyTeenagers' },
+  { name: '赛事信息', url: '/eventInformation' },
+  { name: '商务合作', url: '/businessCooperation' },
+  { name: '关于我们', url: '/aboutUs' }
+]
+
+// 机构菜单
+const navList1 = [
+  { name: '首页', url: '/' },
+  { name: '新闻信息', url: '' },
+  { name: '教练进修', url: '/coachTraining' },
+  { name: '青训机构', url: ''  },
+  { name: '小将之家', url: '' },
+  { name: '球员注册', url: '' },
+  { name: '赛事信息', url: '' },
+  { name: '商务合作', url: '' },
+  { name: '关于我们', url: '/aboutUs' }
+]
+
+// 家长球员
+const navList2 = [
+  { name: '首页', url: '/' },
+  { name: '新闻信息', url: '' },
+  { name: '在线涨球', url: ''  },
+  { name: '青训机构', url: ''  },
+  { name: '小将之家', url: '' },
+  { name: '赛事信息', url: '' },
+  { name: '商务合作', url: '' },
+  { name: '关于我们', url: '/aboutUs' }
+]
+
+// 教练登陆
+const navList3 = [
+  { name: '首页', url: '/' },
+  { name: '教练进修', url: '/coachTraining' },
+  { name: '我的教案', url: '/coach/mycourse' },
+  { name: '我的资料', url: '/coach/myDate'  },
+  { name: '小将之家', url: '' },
+  { name: '赛事信息', url: '' },
+  { name: '商务合作', url: '' },
+  { name: '关于我们', url: '/aboutUs' }
+]
+
+// 管理员登陆
+const navList4 = [
+  { name: '首页', url: '/' },
+  { name: '编辑', url: '' },
+  { name: '财务', url: ''  },
+  { name: '课程', url: ''  },
+  { name: '赛事', url: '' },
+  { name: '权限账号', url: '' },
+  { name: '商务合作', url: '' },
+  { name: '关于我们', url: '/aboutUs' }
+]
 
 export default {
   components: { ResetPassWord },
@@ -91,6 +168,12 @@ export default {
       ],
       menulist:[],
 
+      navList,
+      navList1,
+      navList2,
+      navList3,
+      navList4,
+
       resetPassWordDialog: false
     };
   },
@@ -99,6 +182,15 @@ export default {
     ...mapState('Login', [
       'userStatus'
     ]),
+
+    // 返回登陆当前账号权限
+    navType () {
+      if (!this.userStatus) {
+        return this.navList
+      }
+      const type = this.userStatus.userType || null
+      return type ? this[`navList${type}`] : this.navList
+    },
 
     nikename () {
       return sessionStorage.getItem('nikename')
@@ -115,7 +207,8 @@ export default {
     ]),
 
     ...mapMutations('Login', [
-      'clearLoginStatus'
+      'clearLoginStatus',
+      'setLoginStatus'
     ]),
 
     activeIndex(index){
@@ -153,12 +246,27 @@ export default {
           const { code } = res
           if (code === 200) {
             this.clearLoginStatus()
+            this.$router.push('/')
           }
         })
       })
     }
   },
-  created() {
+
+  created () {
+
+    if (sessionStorage.getItem('nikename')) {
+      const userStatus = {
+        statusId: sessionStorage.getItem('statusId'),
+        headPic: sessionStorage.getItem('headPic'),
+        nikename: sessionStorage.getItem('nikename'),
+        id: sessionStorage.getItem('id'),
+        userType: sessionStorage.getItem('userType')
+      }
+
+      this.setLoginStatus(userStatus)
+    }
+
     let userData = localStorage.getItem('userData');
     this.userData = JSON.parse(userData);
     this.getMenu()

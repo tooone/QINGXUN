@@ -4,9 +4,10 @@
         <div class="login-image" style="background-image: url(/images/loginbg.jpg);">
           <div class="login-con">
             <div class="login-con-tab display-flex-row">
-              <span @click="changtype(1)" :class="{active:ruleForm.type==1}">我是教练员</span>
-              <span @click="changtype(2)" :class="{active:ruleForm.type==2}">我是家长/球员</span>
-              <span @click="changtype(3)" :class="{active:ruleForm.type==3}">我是管理员</span>
+              <span @click="changtype(1)" :class="{active:ruleForm.type==1}">教练员</span>
+              <span @click="changtype(2)" :class="{active:ruleForm.type==2}">家长/球员</span>
+              <span @click="changtype(3)" :class="{active:ruleForm.type==3}">机构</span>
+              <span @click="changtype(4)" :class="{active:ruleForm.type==4}">管理员</span>
             </div>
             <!--登录-->
               <div class="display-flex-row logon-input">
@@ -75,8 +76,9 @@
           const { code, data } = res
           if (code === 200) {
             const { userView } = data
-            const { statusId, pic, nikename } = userView
+            const { statusId, pic, nikename, id } = userView
 
+            // 权限设置
             userView.userType = type
             this.setLoginStatus(userView)
 
@@ -84,6 +86,8 @@
             sessionStorage.setItem('statusId', statusId)
             sessionStorage.setItem('headPic', pic)
             sessionStorage.setItem('nikename', nikename)
+            sessionStorage.setItem('id', id)
+            sessionStorage.setItem('userType', type)
 
             this.$router.push('/')
           }
